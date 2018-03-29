@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.consumable.dao.CxConsumableInfoDao">
+    
+	<sql id="cxConsumableInfoColumns">
+		a.con_id AS "conId",
+		a.con_brand AS "conBrand",
+		a.con_compatible AS "conCompatible",
+		a.con_code AS "conCode",
+		a.con_model AS "conModel",
+		a.con_details AS "conDetails",
+		a.con_num AS "conNum",
+		a.con_reference_price AS "conReferencePrice"
+	</sql>
+	
+	<sql id="cxConsumableInfoJoins">
+	</sql>
+    
+	<select id="get" resultType="CxConsumableInfo">
+		SELECT 
+			<include refid="cxConsumableInfoColumns"/>
+		FROM cx_consumable_info a
+		<include refid="cxConsumableInfoJoins"/>
+		WHERE a.con_id = #{conId}
+	</select>
+	
+	<select id="findList" resultType="CxConsumableInfo">
+		SELECT 
+			<include refid="cxConsumableInfoColumns"/>
+		FROM cx_consumable_info a
+		<include refid="cxConsumableInfoJoins"/>
+		<where>
+			<if test="conBrand != null and conBrand != ''">
+				con_brand = #{conBrand}
+			</if>
+			<if test="conCompatible != null and conCompatible != null">
+				and con_compatible like CONCAT('%',#{conCompatible},'%')
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CxConsumableInfo">
+		SELECT 
+			<include refid="cxConsumableInfoColumns"/>
+		FROM cx_consumable_info a
+		<include refid="cxConsumableInfoJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cx_consumable_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="conBrand != null and conBrand != ''">
+				con_brand,
+			</if>
+			<if test="conCompatible != null and conCompatible != null">
+				con_compatible,
+			</if>
+			<if test="conCode != null and conCode != ''">
+				con_code,
+			</if>
+			<if test="conModel != null and conModel != ''">
+				con_model,
+			</if>
+			<if test="conDetails != null and conDetails != ''">
+				con_details,
+			</if>
+			<if test="conNum != null and conNum != ''">
+				con_num,
+			</if>
+			<if test="conReferencePrice != null and conReferencePrice != ''">
+				con_reference_price,
+			</if>
+		</trim>
+		<trim prefix="values(" suffix=")" suffixOverrides=",">
+			<if test="conBrand != null and conBrand != ''">
+				#{conBrand},
+			</if>
+			<if test="conCompatible != null and conCompatible != null">
+				#{conCompatible},
+			</if>
+			<if test="conCode != null and conCode != ''">
+				#{conCode},
+			</if>
+			<if test="conModel != null and conModel != ''">
+				#{conModel},
+			</if>
+			<if test="conDetails != null and conDetails != ''">
+				#{conDetails},
+			</if>
+			<if test="conNum != null and conNum != ''">
+				#{conNum},
+			</if>
+			<if test="conReferencePrice != null and conReferencePrice != ''">
+				#{conReferencePrice},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="update">
+		UPDATE cx_consumable_info
+		<set>
+			<if test="conBrand != null and conBrand != ''">
+				con_brand = #{conBrand},
+			</if>
+			<if test="conCompatible != null and conCompatible != null">
+				con_compatible = #{conCompatible},
+			</if>
+			<if test="conCode != null and conCode != ''">
+				con_code = #{conCode},
+			</if>
+			<if test="conModel != null and conModel != ''">
+				con_model = #{conModel},
+			</if>
+			<if test="conDetails != null and conDetails != ''">
+				con_details = #{conDetails},
+			</if>
+			<if test="conNum != null and conNum != ''">
+				con_num = #{conNum},
+			</if>
+			<if test="conReferencePrice != null and conReferencePrice != ''">
+				con_reference_price = #{conReferencePrice}
+			</if>
+		</set>
+		WHERE con_id = #{conId}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM cx_consumable_info
+		WHERE con_id = #{conId}
+	</update>
+	
+</mapper>

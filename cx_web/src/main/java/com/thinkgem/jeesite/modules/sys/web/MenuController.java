@@ -173,4 +173,10 @@ public class MenuController extends BaseController {
 		}
 		return mapList;
 	}
+	
+	@RequiresPermissions("sys:menu:view")
+	@RequestMapping(value="/firstPage")
+	public String firstPage() {
+		return "modules/sys/welcome";
+	}
 }
