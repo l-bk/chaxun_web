@@ -6,6 +6,7 @@ package com.thinkgem.jeesite.modules.consumable.web;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,7 +46,7 @@ public class CxConsumableInfoController extends BaseController {
 
 	@Autowired
 	private CxConsumableInfoService cxConsumableInfoService;
-	
+
 	@ModelAttribute
 	public CxConsumableInfo get(@RequestParam(required=false) String id) {
 		CxConsumableInfo entity = null;
@@ -57,7 +58,15 @@ public class CxConsumableInfoController extends BaseController {
 		}
 		return entity;
 	}
-	
+
+
+
+	@RequiresPermissions("consumable:cxConsumableInfo:view")
+	@RequestMapping(value = {"goBatchAdd", ""})
+	public String goBatchAdd(CxConsumableInfo cxConsumableInfo, HttpServletRequest request, HttpServletResponse response, Model model) {
+		return "modules/consumable/cxConsumableInfoBatchAdd";
+	}
+
 	@RequiresPermissions("consumable:cxConsumableInfo:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(CxConsumableInfo cxConsumableInfo, HttpServletRequest request, HttpServletResponse response, Model model) {
@@ -84,20 +93,20 @@ public class CxConsumableInfoController extends BaseController {
 		}
 		cxConsumableInfoService.save(cxConsumableInfo);
 		addMessage(redirectAttributes, "保存耗材信息成功");
-		return "redirect:"+Global.getAdminPath()+"/consumable/cxConsumableInfo/?repage";
+		return "redirect:"+Global.getAdminPath()+"/consumable/cxConsumableInfo/list?repage";
 	}
-	
+
 	@RequiresPermissions("consumable:cxConsumableInfo:edit")
 	@RequestMapping(value = "delete")
 	public String delete(CxConsumableInfo cxConsumableInfo, RedirectAttributes redirectAttributes) {
 		cxConsumableInfoService.delete(cxConsumableInfo);
 		addMessage(redirectAttributes, "删除耗材信息成功");
-		return "redirect:"+Global.getAdminPath()+"/consumable/cxConsumableInfo/?repage";
+		return "redirect:"+Global.getAdminPath()+"/consumable/cxConsumableInfo/list?repage";
 	}
-	
+
 	@RequiresPermissions("consumable:cxConsumableInfo:edit")
 	@RequestMapping(value = "batchAdd", method = RequestMethod.POST)
-	public String batchAdd(MultipartFile file, RedirectAttributes redirectAttributes, HttpServletRequest req,
+	public String batchAdd(MultipartFile file,Model model,RedirectAttributes redirectAttributes, HttpServletRequest req,
 			HttpServletResponse res) {
 		Workbook book;
 		try {
@@ -105,60 +114,86 @@ public class CxConsumableInfoController extends BaseController {
 			Sheet sheet = book.getSheetAt(0);// 获得第一个工作表对象
 
 			int rows = sheet.getPhysicalNumberOfRows();
-			Row row = sheet.getRow(0);
+			Row row = sheet.getRow(0);//获取第一行
 			int columns = row.getPhysicalNumberOfCells();
 
 			// 循环除了第一行的所有行
-			for (int i = 2; i < rows; i++) {
+			for (int i =1; i < rows; i++) {
 				boolean is = true;
-				Cell cell = sheet.getRow(i).getCell(4);
+				StringBuffer s= new StringBuffer();
+				CxConsumableInfo info =new CxConsumableInfo();
 				for (int j = 0; j <= columns; j++) {
 					if (sheet.getRow(i).getCell(j) != null) {// 读取某行某列不为空
 						sheet.getRow(i).getCell(j).setCellType(Cell.CELL_TYPE_STRING);// 设置读取的类型为String
+						switch(j){
+						case 1:
+							info.setConBrand(sheet.getRow(i).getCell(j).toString());
+							break;
+						case 2:
+							info.setConCompatible(sheet.getRow(i).getCell(j).toString());
+							break;
+						case 3:
+							info.setConCode(sheet.getRow(i).getCell(j).toString());
+							break;
+						case 4:
+							info.setConModel(sheet.getRow(i).getCell(j).toString());
+							break;
+						case 5:
+							info.setConDetails(sheet.getRow(i).getCell(j).toString());
+							break;
+						case 6:
+							info.setConNum(sheet.getRow(i).getCell(j).toString());
+							break;
+						case 7:
+							info.setConReferencePrice(new BigDecimal(sheet.getRow(i).getCell(j).toString()));
+							break;
 						}
 					}
+				}
+				cxConsumableInfoService.save(info);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 
 		}
-		return "redirect:" + Global.getAdminPath() + "/gdm/tbGdmGoods/list";
+		return "redirect:"+Global.getAdminPath()+"/consumable/cxConsumableInfo/list?repage";
+	
 	}
 
 	/*
 	 * 下载execl文档
 	 */
-	
+
 	@RequiresPermissions("consumable:cxConsumableInfo:edit")
 	@RequestMapping(value = "uploadExecl")
 	public void uploadExecl(HttpServletRequest request, HttpServletResponse response,
 			Model model) throws Exception {
 
-		 	String filename = request.getParameter("filename");  
-	        System.out.println(filename);  
-	          
-	        //设置文件MIME类型  
-	        response.setContentType(request.getSession().getServletContext().getMimeType(filename));  
-	        //设置Content-Disposition  
-	        response.setHeader("Content-Disposition", "attachment;filename="+filename);  
-	        //读取目标文件，通过response将目标文件写到客户端  
-	        //获取目标文件的绝对路径  
-	        String fullFileName = request.getSession().getServletContext().getRealPath("/userfiles/excel/" + filename);  
-	        //System.out.println(fullFileName);  
-	        //读取文件  
-	        InputStream in = new FileInputStream(fullFileName);  
-	        OutputStream out = response.getOutputStream();  
-	          
-	        //写文件  
-	        int b;  
-	        while((b=in.read())!= -1)  
-	        {  
-	            out.write(b);
-	        }  
-	          
-	        in.close();  
-	        out.close();  
-		
-		
+		String filename = request.getParameter("filename");  
+		System.out.println(filename);  
+
+		//设置文件MIME类型  
+		response.setContentType(request.getSession().getServletContext().getMimeType(filename));  
+		//设置Content-Disposition  
+		response.setHeader("Content-Disposition", "attachment;filename="+filename);  
+		//读取目标文件，通过response将目标文件写到客户端  
+		//获取目标文件的绝对路径  
+		String fullFileName = request.getSession().getServletContext().getRealPath("/userfiles/excel/" + filename);  
+		//System.out.println(fullFileName);  
+		//读取文件  
+		InputStream in = new FileInputStream(fullFileName);  
+		OutputStream out = response.getOutputStream();  
+
+		//写文件  
+		int b;  
+		while((b=in.read())!= -1)  
+		{  
+			out.write(b);
+		}  
+
+		in.close();  
+		out.close();  
+
+
 	}
 }

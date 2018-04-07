@@ -56,7 +56,7 @@ body {
 <body>
 
 	<div class="content">
-		<h3>欢迎登陆查询开发平台</h3>
+		<h3>欢迎登陆耗材之家开发平台</h3>
 		<%-- <div class="link-panel ">
 			<a href="${ctx}/pic/xcPicture/list?picType=1"> <i class="icon-picture"></i><br />
 				<span>轮播图列表</span>

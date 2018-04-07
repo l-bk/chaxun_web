@@ -27,10 +27,12 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/consumable/cxConsumableInfo/">耗材信息列表</a></li>
+		<li><a href="${ctx}/consumable/cxConsumableInfo/list">耗材信息列表</a></li>
 		<li class="active"><a href="${ctx}/consumable/cxConsumableInfo/form?id=${cxConsumableInfo.conId}">耗材信息<shiro:hasPermission name="consumable:cxConsumableInfo:edit">${not empty cxConsumableInfo.conId?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="consumable:cxConsumableInfo:edit">查看</shiro:lacksPermission></a></li>
+		<shiro:hasPermission name="consumable:cxConsumableInfo:edit"><li><a href="${ctx}/consumable/cxConsumableInfo/goBatchAdd">批量导入</a></li></shiro:hasPermission>
+		
 	</ul><br/>
-	<form:form id="inputForm" modelAttribute="cxConsumableInfo" action="${ctx}/consumable/cxConsumableInfo/batchAdd" method="post" class="form-horizontal">
+	<form:form id="inputForm" modelAttribute="cxConsumableInfo" enctype="multipart/form-data" action="${ctx}/consumable/cxConsumableInfo/batchAdd" method="post" class="form-horizontal">
 		<form:hidden path="conId"/>
 		<sys:message content="${message}"/>		
 			

@@ -14,14 +14,17 @@
 			$("#searchForm").submit();
         	return false;
         }
+	
 	</script>
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/consumable/cxConsumableInfo/">耗材信息列表</a></li>
+		<li class="active"><a href="${ctx}/consumable/cxConsumableInfo/list">耗材信息列表</a></li>
 		<shiro:hasPermission name="consumable:cxConsumableInfo:edit"><li><a href="${ctx}/consumable/cxConsumableInfo/form">耗材信息添加</a></li></shiro:hasPermission>
+		<shiro:hasPermission name="consumable:cxConsumableInfo:edit"><li><a href="${ctx}/consumable/cxConsumableInfo/goBatchAdd">批量导入</a></li></shiro:hasPermission>
+		
 	</ul>
-	<form:form id="searchForm" modelAttribute="cxConsumableInfo" action="${ctx}/consumable/cxConsumableInfo/" method="post" class="breadcrumb form-search">
+	<form:form id="searchForm" modelAttribute="cxConsumableInfo" action="${ctx}/consumable/cxConsumableInfo/list" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 			&nbsp;<label class="control-label">品牌：</label>
@@ -61,5 +64,6 @@
 		</tbody>
 	</table>
 	<div class="pagination">${page}</div>
+	</script>
 </body>
 </html>
