@@ -126,25 +126,25 @@ public class CxConsumableInfoController extends BaseController {
 					if (sheet.getRow(i).getCell(j) != null) {// 读取某行某列不为空
 						sheet.getRow(i).getCell(j).setCellType(Cell.CELL_TYPE_STRING);// 设置读取的类型为String
 						switch(j){
-						case 1:
+						case 0:
 							info.setConBrand(sheet.getRow(i).getCell(j).toString());
 							break;
-						case 2:
+						case 1:
 							info.setConCompatible(sheet.getRow(i).getCell(j).toString());
 							break;
-						case 3:
+						case 2:
 							info.setConCode(sheet.getRow(i).getCell(j).toString());
 							break;
-						case 4:
+						case 3:
 							info.setConModel(sheet.getRow(i).getCell(j).toString());
 							break;
-						case 5:
+						case 4:
 							info.setConDetails(sheet.getRow(i).getCell(j).toString());
 							break;
-						case 6:
+						case 5:
 							info.setConNum(sheet.getRow(i).getCell(j).toString());
 							break;
-						case 7:
+						case 6:
 							info.setConReferencePrice(new BigDecimal(sheet.getRow(i).getCell(j).toString()));
 							break;
 						}

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.pic.dao.CxPicDao">
+
+	<sql id="cxPicColumns">
+		a.pic_id AS "picId",
+		a.pic_name AS "picName",
+		a.pic_path AS
+		"picPath"
+	</sql>
+
+	<sql id="cxPicJoins">
+	</sql>
+
+	<select id="get" resultType="CxPic">
+		SELECT
+		<include refid="cxPicColumns" />
+		FROM cx_pic a
+		<include refid="cxPicJoins" />
+		WHERE a.pic_id = #{picId}
+	</select>
+
+	<select id="findList" resultType="CxPic">
+		SELECT
+		<include refid="cxPicColumns" />
+		FROM cx_pic a
+		<include refid="cxPicJoins" />
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="CxPic">
+		SELECT
+		<include refid="cxPicColumns" />
+		FROM cx_pic a
+		<include refid="cxPicJoins" />
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO cx_pic
+
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="picName != null and picName != ''">
+				pic_name,
+			</if>
+			<if test="picPath != null and picPath != ''">
+				pic_path,
+			</if>
+		</trim>
+		<trim prefix="values(" suffix=")" suffixOverrides=",">
+			<if test="picName != null and picName != ''">
+				#{picName},
+			</if>
+			<if test="picPath != null and picPath != ''">
+				#{picPath},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="update">
+		UPDATE cx_pic SET
+		pic_name = #{picName},
+		pic_path = #{picPath}
+		WHERE pic_id = #{picId}
+	</update>
+
+	<update id="delete">
+		DELETE FROM cx_pic
+		WHERE pic_id = #{picId}
+	</update>
+
+</mapper>
