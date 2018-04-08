@@ -30,7 +30,8 @@
 		<thead>
 			<tr>
 				<th>图片名称</th>
-				<c:if test="${cxPic.picPath != null}"><th>图片</th><th>图片路径</th></c:if>
+				<th>图片</th>
+				<th>图片路径</th>
 				
 				<shiro:hasPermission name="pic:cxPic:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
@@ -39,7 +40,8 @@
 		<c:forEach items="${page.list}" var="cxPic">
 			<tr>
 				<td>${cxPic.picName}</td>
-				<c:if test="${cxPic.picPath != null}"><td><img src=${cxPic.picName}/></td><td>${cxPic.picPath}</td></c:if>
+				<td><c:if test="${cxPic.picPath != ''}"><img src="${cxPic.picPath}" width="100px"/></c:if></td>
+				<td><c:if test="${cxPic.picPath != ''}">${cxPic.picPath}</c:if></td>
 				<shiro:hasPermission name="pic:cxPic:edit"><td>
     				<a href="${ctx}/pic/cxPic/form?id=${cxPic.picId}">修改</a>
 					<a href="${ctx}/pic/cxPic/delete?id=${cxPic.picId}" onclick="return confirmx('确认要删除该图片信息吗？', this.href)">删除</a>
