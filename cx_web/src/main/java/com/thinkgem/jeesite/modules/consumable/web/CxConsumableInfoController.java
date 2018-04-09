@@ -120,80 +120,73 @@ public class CxConsumableInfoController extends BaseController {
 			// 循环除了第一行的所有行
 			for (int i =1; i < rows; i++) {
 				boolean is = true;
-				StringBuffer s= new StringBuffer();
 				CxConsumableInfo info =new CxConsumableInfo();
 				for (int j = 0; j <= columns; j++) {
-					if (sheet.getRow(i).getCell(j) != null) {// 读取某行某列不为空
+					if (null != sheet.getRow(i).getCell(j)) {// 读取某行某列不为空
 						sheet.getRow(i).getCell(j).setCellType(Cell.CELL_TYPE_STRING);// 设置读取的类型为String
-						switch(j){
-						case 0:
+						if(j == 0){
 							info.setConBrand(sheet.getRow(i).getCell(j).toString());
-							break;
-						case 1:
+						}else if(j == 1) {
 							info.setConCompatible(sheet.getRow(i).getCell(j).toString());
-							break;
-						case 2:
+						}else if(j == 2) {
 							info.setConCode(sheet.getRow(i).getCell(j).toString());
-							break;
-						case 3:
+						}else if(j == 3) {
 							info.setConModel(sheet.getRow(i).getCell(j).toString());
-							break;
-						case 4:
+						}else if(j == 4) {
 							info.setConDetails(sheet.getRow(i).getCell(j).toString());
-							break;
-						case 5:
+						}else if(j == 5) {
 							info.setConNum(sheet.getRow(i).getCell(j).toString());
-							break;
-						case 6:
-							info.setConReferencePrice(new BigDecimal(sheet.getRow(i).getCell(j).toString()));
-							break;
+						}else if (j == 6) {
+							if(null != sheet.getRow(i).getCell(j).toString() && !"".equals(sheet.getRow(i).getCell(j).toString())) {
+								info.setConReferencePrice(new BigDecimal(sheet.getRow(i).getCell(j).toString()));
+							}		
 						}
-					}
 				}
-				cxConsumableInfoService.save(info);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-
+			cxConsumableInfoService.save(info);
 		}
-		return "redirect:"+Global.getAdminPath()+"/consumable/cxConsumableInfo/list?repage";
-	
-	}
-
-	/*
-	 * 下载execl文档
-	 */
-
-	@RequiresPermissions("consumable:cxConsumableInfo:edit")
-	@RequestMapping(value = "uploadExecl")
-	public void uploadExecl(HttpServletRequest request, HttpServletResponse response,
-			Model model) throws Exception {
-
-		String filename = request.getParameter("filename");  
-		System.out.println(filename);  
-
-		//设置文件MIME类型  
-		response.setContentType(request.getSession().getServletContext().getMimeType(filename));  
-		//设置Content-Disposition  
-		response.setHeader("Content-Disposition", "attachment;filename="+filename);  
-		//读取目标文件，通过response将目标文件写到客户端  
-		//获取目标文件的绝对路径  
-		String fullFileName = request.getSession().getServletContext().getRealPath("/userfiles/excel/" + filename);  
-		//System.out.println(fullFileName);  
-		//读取文件  
-		InputStream in = new FileInputStream(fullFileName);  
-		OutputStream out = response.getOutputStream();  
-
-		//写文件  
-		int b;  
-		while((b=in.read())!= -1)  
-		{  
-			out.write(b);
-		}  
-
-		in.close();  
-		out.close();  
-
+	} catch (Exception e) {
+		e.printStackTrace();
 
 	}
+	return "redirect:"+Global.getAdminPath()+"/consumable/cxConsumableInfo/list?repage";
+
+}
+
+/*
+ * 下载execl文档
+ */
+
+@RequiresPermissions("consumable:cxConsumableInfo:edit")
+@RequestMapping(value = "uploadExecl")
+public void uploadExecl(HttpServletRequest request, HttpServletResponse response,
+		Model model) throws Exception {
+
+	String filename = request.getParameter("filename");  
+	System.out.println(filename);  
+
+	//设置文件MIME类型  
+	response.setContentType(request.getSession().getServletContext().getMimeType(filename));  
+	//设置Content-Disposition  
+	response.setHeader("Content-Disposition", "attachment;filename="+filename);  
+	//读取目标文件，通过response将目标文件写到客户端  
+	//获取目标文件的绝对路径  
+	String fullFileName = request.getSession().getServletContext().getRealPath("/userfiles/excel/" + filename);  
+	//System.out.println(fullFileName);  
+	//读取文件  
+	InputStream in = new FileInputStream(fullFileName);  
+	OutputStream out = response.getOutputStream();  
+
+	//写文件  
+	int b;  
+	while((b=in.read())!= -1)  
+	{  
+		out.write(b);
+	}  
+
+	in.close();  
+	out.close();  
+
+
+}
 }
