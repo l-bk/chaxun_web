@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.announcement.dao.CxAnnouncementInfoDao">
+    
+	<sql id="cxAnnouncementInfoColumns">
+		a.an_id AS "anId",
+		a.an_details AS "anDetails",
+		a.an_status AS "anStatus",
+		a.create_date AS "createDate"
+	</sql>
+	
+	<sql id="cxAnnouncementInfoJoins">
+	</sql>
+    
+	<select id="get" resultType="CxAnnouncementInfo">
+		SELECT 
+			<include refid="cxAnnouncementInfoColumns"/>
+		FROM cx_announcement_info a
+		<include refid="cxAnnouncementInfoJoins"/>
+		WHERE a.an_id = #{anId}
+	</select>
+	
+	<select id="findList" resultType="CxAnnouncementInfo">
+		SELECT 
+			<include refid="cxAnnouncementInfoColumns"/>
+		FROM cx_announcement_info a
+		<include refid="cxAnnouncementInfoJoins"/>
+		<where>
+			<if test="anStatus != null and anStatus != ''">
+				a.an_status = #{anStatus}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				order by a.create_date
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CxAnnouncementInfo">
+		SELECT 
+			<include refid="cxAnnouncementInfoColumns"/>
+		FROM cx_announcement_info a
+		<include refid="cxAnnouncementInfoJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cx_announcement_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="anDetails != null and anDetails != ''">
+				an_details,
+			</if>			
+			<if test="anStatus != null and anStatus != ''">
+				an_status,
+			</if>
+				create_date
+		</trim>
+		<trim prefix="value(" suffix=")" suffixOverrides=",">
+			<if test="anDetails != null and anDetails != ''">
+				#{anDetails},
+			</if>
+			<if test="anStatus != null and anStatus != ''">
+				#{anStatus},
+			</if>
+				now()
+		</trim>
+	</insert>
+	
+	<update id="update">
+		UPDATE cx_announcement_info SET 	
+			an_details = #{anDetails},
+			an_status = #{anStatus}
+		WHERE an_id = #{anId}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM cx_announcement_info
+		WHERE an_id = #{anId}
+	</update>
+	<update id="updateStatus">
+		update cx_announcement_info
+		set an_status = '0'
+		where an_status = '1'
+	</update>
+	
+</mapper>
