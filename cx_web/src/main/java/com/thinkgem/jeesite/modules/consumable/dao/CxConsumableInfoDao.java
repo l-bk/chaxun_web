@@ -14,5 +14,5 @@ import com.thinkgem.jeesite.modules.consumable.entity.CxConsumableInfo;
  */
 @MyBatisDao
 public interface CxConsumableInfoDao extends CrudDao<CxConsumableInfo> {
-	
+	public void cleanAll();
 }

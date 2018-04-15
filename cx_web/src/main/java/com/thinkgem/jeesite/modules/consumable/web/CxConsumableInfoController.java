@@ -186,7 +186,15 @@ public void uploadExecl(HttpServletRequest request, HttpServletResponse response
 
 	in.close();  
 	out.close();  
-
-
 }
+
+
+	@RequiresPermissions("consumable:cxConsumableInfo:edit")
+	@RequestMapping(value = "cleanAll", method = RequestMethod.GET)
+	public String cleanAll(CxConsumableInfo cxConsumableInfo, RedirectAttributes redirectAttributes) {
+		cxConsumableInfoService.cleanAll();
+		addMessage(redirectAttributes, "删除耗材信息成功");
+		return "redirect:"+Global.getAdminPath()+"/consumable/cxConsumableInfo/list?repage";
+	}
+
 }

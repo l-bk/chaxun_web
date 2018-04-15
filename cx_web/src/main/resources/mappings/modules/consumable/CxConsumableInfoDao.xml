@@ -146,4 +146,8 @@
 		WHERE con_id = #{conId}
 	</update>
 	
+		<delete id="cleanAll">
+		delete from cx_consumable_info
+	</delete>
+	
 </mapper>

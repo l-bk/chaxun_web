@@ -6,6 +6,7 @@ package com.thinkgem.jeesite.modules.consumable.service;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,9 @@ import com.thinkgem.jeesite.modules.consumable.dao.CxConsumableInfoDao;
 @Transactional(readOnly = true)
 public class CxConsumableInfoService extends CrudService<CxConsumableInfoDao, CxConsumableInfo> {
 
+	@Autowired
+	private CxConsumableInfoDao cxConsumableInfoDao;
+	
 	public CxConsumableInfo get(String id) {
 		return super.get(id);
 	}
@@ -48,4 +52,8 @@ public class CxConsumableInfoService extends CrudService<CxConsumableInfoDao, Cx
 		super.delete(cxConsumableInfo);
 	}
 	
+	@Transactional(readOnly = false)
+	public void cleanAll(){
+		cxConsumableInfoDao.cleanAll();
+	}
 }

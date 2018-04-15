@@ -96,4 +96,5 @@
 		where an_status = '1'
 	</update>
 	
+	
 </mapper>

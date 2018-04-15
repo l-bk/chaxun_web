@@ -25,8 +25,9 @@
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<!-- <input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/> -->
+		
 	</form:form>
-	<sys:message content="${message}"/>
+	<sys:message  content="${message}"/>
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
